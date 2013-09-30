@@ -998,7 +998,8 @@
         if (!rule.validator(observable(), ctx.params === undefined ? true : ctx.params)) { // default param is true, eg. required = true
 
             //not valid, so format the error message and stick it in the 'error' variable
-            observable.error(exports.formatMessage(ctx.message || rule.message, ctx.params));
+            // -- observable.error(exports.formatMessage(ctx.message || rule.message, ctx.params));
+            observable.error = ko.computed(function () { var message = ko.unwrap(ctx.message); return ko.validation.formatMessage(message || rule.message, ctx.params) }); // =dg= 22 aug 2013 added computed and observer support
             observable.__valid__(false);
             return false;
         } else {
